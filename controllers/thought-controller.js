@@ -32,7 +32,7 @@ router.put('/update/:id', ({ params, body }, res) => {
     Thought.findOneAndUpdate({ _id: params.id }, body, { new: true })
       .then(dbThought => {
         if (!dbThought) {
-          res.json({ message: 'No note found with this id!' });
+          res.json({ message: 'No thought found with this id!' });
           return;
         }
         res.json(dbThought);
@@ -45,14 +45,20 @@ router.put('/update/:id', ({ params, body }, res) => {
 
 
 //DELETE thoughts
-router.delete('/:id', (req, res) => {
-    Thought.destroy({
-      where: {
-        id: req.params.id
-      }
-    }).then((deletethought) => res.status(200).json(deletethought))
-    .catch((err) => res.status(500).json(err))
+router.delete('/delete/:id', ({ params }, res) => {
+    Thought.findOneAndDelete({ _id: params.id })
+      .then(dbThought => {
+        if (!dbThought) {
+          res.json({ message: 'No thought found with this id!' });
+          return;
+        }
+        res.json(dbThought);
+      })
+      .catch(err => {
+        res.json(err);
+      });
   });
+  
 
 //ADD thoughts
 
